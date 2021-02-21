@@ -25,9 +25,28 @@
   padding: 0.5rem;
   font-size: 1.0rem;
   width: 100%;
+  position: relative;
+  z-index: 1400;
   
   /* border-radius: 30px; */
 
+}
+
+[data-reach-combobox-popover] {
+  z-index: 4000;
+  position: absolute;
+  width: 15vw;
+  /* width: 100%; */
+}
+[data-reach-combobox-option][data-highlighted] {
+  z-index: 1450;
+}
+
+[data-reach-combobox-list] {
+  /* max-width: 250px;
+  width: 100%; */
+
+  z-index: 1450;
 }
 
 
