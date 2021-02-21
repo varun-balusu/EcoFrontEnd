@@ -14,8 +14,8 @@
   top: 8rem;
   /* right: 50%; */
   /* transform: translateX(-50%); */
-  width: 100%;
-  max-width: 200px;
+  width: 80%;
+  /* max-width: 13.88vw; */
   /* z-index: 10; */
   
  
@@ -35,17 +35,21 @@
 [data-reach-combobox-popover] {
   z-index: 4000;
   position: absolute;
-  width: 15vw;
+  width: 249px;
   /* width: 100%; */
 }
-[data-reach-combobox-option][data-highlighted] {
+[data-reach-combobox-option]{
+  font-family: 'Lato', sans-serif;
+  border-bottom: 1px black dotted; 
+  font-weight: bold;
+  color: black;
   z-index: 1450;
 }
 
 [data-reach-combobox-list] {
   /* max-width: 250px;
   width: 100%; */
-
+  
   z-index: 1450;
 }
 
