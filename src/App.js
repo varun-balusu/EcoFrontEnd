@@ -9,30 +9,18 @@ import { Toolbar, IconButton, Typography, Button } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import { makeStyles } from '@material-ui/core/styles';
 import Search from "./search";
-
-//combo
-import {
-  Combobox,
-  ComboboxInput,
-  
-} from "@reach/combobox"
+import StepContent from "./stepContent"
+import SidePanel from "./sidePanel"
 
 
-//drawer
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 
-//stepper
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import zIndex from '@material-ui/core/styles/zIndex';
+
+
+
+
+
+
+
 
 
 
@@ -85,6 +73,16 @@ function App() {
   const classes = useStyles();
 
 
+  const[drawerToggle, setDrawerToggle] = React.useState(true);
+
+
+  const toggleDrawer = (open) => (event) => {
+
+    setDrawerToggle(open)
+
+  }
+
+
   
 
   const {isLoaded, loadError} = useJsApiLoader({
@@ -93,64 +91,6 @@ function App() {
     libraries: libraries
   })
 
-  
-  function StepContent(props){
-    switch (props.currentStep) {
-      case 0:
-        return (
-        <div style={{ display:"flex", justifyContent:"center", maxWidth:305}}>
-  
-        <Search  
-          panTo = {panTo} 
-          changeMarker={marker => setMarkers([...markers, marker])}
-          placeholder = "Starting Location">
-
-        
-          
-        </Search> 
-          
-  
-        </div> );
-      case 1:
-        return (
-          <div div style={{ display:"flex", justifyContent:"center", maxWidth:305}}>
-  
-          <Search  
-          panTo = {panTo} 
-          changeMarker={marker => setMarkers([...markers, marker])}
-          placeholder = "Destination">
-            
-          </Search>
-            
-    
-          </div> 
-        );
-      case 2:
-        return (
-          <div style={{ display:"flex", alignItems:"center", maxWidth:305, flexDirection: "column"}}>
-            <div className="search">
-              <Combobox>
-                <ComboboxInput placeholder="Make"></ComboboxInput>
-              </Combobox>
-            </div>
-            <div className="search" style={{paddingTop:"1em"}}>
-              <Combobox>
-                <ComboboxInput placeholder="Model"></ComboboxInput>
-              </Combobox>
-            </div>
-            <div className="search" style={{paddingTop:"1em"}}>
-              <Combobox>
-                <ComboboxInput placeholder="Year"></ComboboxInput>
-              </Combobox>
-            </div>
-            
-          </div>
-
-        )
-      default:
-        return <div></div>
-    }
-  }
 
   const mapRef = React.useRef();
 
@@ -192,79 +132,17 @@ function App() {
   //   fitBounds();
   // }
 
-  const[drawerToggle, setDrawerToggle] = React.useState(true);
 
 
-  const toggleDrawer = (open) => (event) => {
-
-    setDrawerToggle(open)
-
-  }
-
-  const[activeStep, setActiveStep] = React.useState(0);
 
 
-  const nextStep = () => {
-    if(activeStep < 2){
-      setActiveStep(activeStep + 1)
-      console.log(activeStep)
-    }
-
-  }
-
-  const prevStep = () => {
-    if(activeStep !== 0){
-      setActiveStep(activeStep - 1)
-      console.log(activeStep)
-    }
-
+  function handleMarkerUpdatesFromSearch(marker){
+    setMarkers([...markers, marker])
   }
 
 
   
-  const list = () => (
-
-    // <List>
-    //   <ListItem style={{paddingTop:"5em", paddingLeft:"0.75em"}}>
-    //     <Search  panTo = {panTo} changeMarker={marker => setMarkers([...markers, marker])}  ></Search>
-    // </ListItem>
-    // </List>
-
-    <List>
-      <ListItem style={{paddingLeft:"0em"}}>
-        <div style={{width:"100%"}}>
-            <Stepper activeStep={activeStep} style={{paddingTop:"5em", paddingLeft:"0em"}}>
-              <Step>
-                <StepLabel>Start</StepLabel>
-              </Step>
-              <Step>
-                <StepLabel>Destination</StepLabel>
-              </Step>
-              <Step>
-                <StepLabel>Vehicle</StepLabel>
-              </Step>
-            </Stepper>
-
-            <StepContent currentStep={activeStep}></StepContent>
-
-          <div style={{paddingTop: "2em", width:"100%", display:"flex", justifyContent:"center"}}>
-
-
-            <Button variant="outlined" color="primary" onClick={prevStep}>Prev</Button>  
-
-            <Button variant="outlined" color="primary" onClick={nextStep}>Next</Button>
-
-            
-
-          </div>
-          
-
-        </div>
-      </ListItem>
-    </List>
-
-
-  )
+  
 
   
 
@@ -317,29 +195,8 @@ function App() {
           
       </div>
 
-      
-      {/* <Container style={{paddingTop: "0.5em"}}>
 
-        <Search  panTo = {panTo} changeMarker={marker => setMarkers([...markers, marker])}  ></Search>
-
-      </Container> */}
-
-      <Drawer 
-        anchor = {'left'} 
-        open = {drawerToggle} 
-        onClose = {toggleDrawer(false)} 
-        classes={{ paper: classes.paper }} 
-        BackdropProps={{ invisible: true }}>
-        {list()}
-
-      </Drawer>
-      
-     {/* <Container style={{width: "100%", height: "30vh", backgroundColor: "white", maxWidth: "none"}}>
-      <Search  panTo = {panTo} changeMarker={marker => setMarkers([...markers, marker])}  ></Search>
-     <Button onClick={toggleDrawer(true)}> Open from Side </Button>
-      
-      
-     </Container> */}
+      <SidePanel drawerToggle={drawerToggle} toggleDrawer={toggleDrawer} panTo={panTo} setMarkers={handleMarkerUpdatesFromSearch}></SidePanel>
 
 
       {/* <DistanceMatrixService
