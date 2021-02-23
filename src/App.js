@@ -124,8 +124,18 @@ function App() {
 
   }, []);
 
-  function handleMarkerUpdatesFromSearch(marker){
-    setMarkers([...markers, marker])
+  function handleMarkerUpdatesFromSearch(marker, searchType){
+    let newMarkers = [...markers]
+    if(searchType == 1){
+      newMarkers[0] = marker
+    }
+    else if(searchType == 2){
+
+      newMarkers[1] = marker
+
+    }
+
+    setMarkers(newMarkers)
   }
 
 

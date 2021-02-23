@@ -54,6 +54,17 @@ function SidePanel(props){
 
     const[destinationDisplayError, setDestinationDisplayError] = React.useState(false);
 
+    const[mode, setMode] = React.useState("")
+
+    const[modeError, setModeError] = React.useState(false)
+
+
+    function handleChangeMode(option){
+      setMode(option.target.value)
+    }
+
+
+
 
     function isStartPointValid(flag){
       setvalidStartPointSelected(true);
@@ -69,6 +80,14 @@ function SidePanel(props){
       }
 
     }, [validStartPointSelected])
+
+    React.useEffect(() => {
+
+      if(mode !== ""){
+        setModeError(false);
+      }
+
+    }, [mode])
 
     React.useEffect(() => {
       if(validDestinationPointSelected){
@@ -113,6 +132,13 @@ function SidePanel(props){
   
     }
 
+    const finish = () => {
+      if(mode === ""){
+        setModeError(true);
+      }
+      //else call prop function to make api call with all the gathered data
+    }
+
     const list = () => (
 
         // <List>
@@ -148,6 +174,9 @@ function SidePanel(props){
                   savedDestinationValue = {props.savedDestinationValue}
                   startDisplayError = {startDisplayError}
                   destinationDisplayError = {destinationDisplayError}
+                  updateMode={handleChangeMode}
+                  mode = {mode}
+                  modeError = {modeError}
 
                   ></StepContent>
         
@@ -156,7 +185,7 @@ function SidePanel(props){
         
                 <Button variant="outlined" color="primary" onClick={prevStep}>Prev</Button>  
         
-                {activeStep === 2 ? <Button variant="outlined" color="primary" onClick={nextStep}>Finish</Button> 
+                {activeStep === 2 ? <Button variant="outlined" color="primary" onClick={finish}>Finish</Button> 
                     :<Button variant="outlined" color="primary" onClick={nextStep}>Next</Button>}
                 </div>
                 

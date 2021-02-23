@@ -91,7 +91,7 @@ function Search( props){
                 props.isDestinationValid(true)
               }
   
-              props.changeMarker({lat, lng})
+              props.changeMarker({lat, lng}, props.searchNumber)
             }
             catch(error){
               console.log(error);
@@ -116,7 +116,7 @@ function Search( props){
                 
                 placeholder={placeholder}
 
-                style={{borderColor: value === "" && props.displayError ? "#f44336" : 'green', borderStyle:"solid"}}
+                style={{borderColor: displayError ? "#f44336" : 'green', borderStyle:"solid"}}
               />
              
               <ComboboxPopover portal={false}>
