@@ -12,18 +12,6 @@ import Search from "./search";
 import StepContent from "./stepContent"
 import SidePanel from "./sidePanel"
 
-
-
-
-
-
-
-
-
-
-
-
-
 const mapContainerStyle = {
   width: "100vw",
   height: "92.5vh",
@@ -60,21 +48,31 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-
-
-
-
-
-
-
-
 function App() {
 
   const classes = useStyles();
 
+  
+
 
   const[drawerToggle, setDrawerToggle] = React.useState(true);
 
+
+  const[startPoint, setStartPoint] = React.useState({address: null, latlng: null})
+
+  const[destination, setDestination] = React.useState({address: null, latlng: null})
+
+
+  const handleStartSelect = (option, latlng) => {
+
+    setStartPoint({address: option, latlng: latlng});
+  }
+
+  const handleDestinationSelect = (option, latlng) => {
+
+    setDestination({address: option, latlng: latlng});
+
+  }
 
   const toggleDrawer = (open) => (event) => {
 
@@ -126,27 +124,9 @@ function App() {
 
   }, []);
 
-
-  // function sayHello(){
-  //   console.log(markers.length);
-  //   fitBounds();
-  // }
-
-
-
-
-
   function handleMarkerUpdatesFromSearch(marker){
     setMarkers([...markers, marker])
   }
-
-
-  
-  
-
-  
-
-  
 
 
   if(loadError){
@@ -196,25 +176,28 @@ function App() {
       </div>
 
 
-      <SidePanel drawerToggle={drawerToggle} toggleDrawer={toggleDrawer} panTo={panTo} setMarkers={handleMarkerUpdatesFromSearch}></SidePanel>
+      <SidePanel 
+        drawerToggle={drawerToggle} 
+        toggleDrawer={toggleDrawer} 
+        panTo={panTo} 
+        setMarkers={handleMarkerUpdatesFromSearch}
+        setStartPoint={handleStartSelect}
+        setDestination = {handleDestinationSelect}
+        savedStartValue = {startPoint}
+        savedDestinationValue = {destination}
+        ></SidePanel>
 
 
       {/* <DistanceMatrixService
       options={{
-           destinations: [{lat:37.774929, lng:-122.419418}],
+           destinations: [{lat:43.653226, lng:-79.3831843}],
            origins: [{lng:-118.243683, lat:34.052235}],
-           travelMode: "DRIVING",
-          //  transitOptions: {modes:["TRAM"]}
+           travelMode: "TRANSIT",
+           transitOptions: {modes:["RAIL"]}
          }}
       callback = {(response) => {console.log(response)}}
       /> */}
 
-
-      
-        
-
-       
-      
     </div>
     
   ) : <></>

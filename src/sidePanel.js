@@ -46,13 +46,63 @@ function SidePanel(props){
 
     const[activeStep, setActiveStep] = React.useState(0);
 
+    const[validStartPointSelected, setvalidStartPointSelected] = React.useState(false);
+
+    const[validDestinationPointSelected, setValidDestinationPointSelected] = React.useState(false);
+
+    const[startDisplayError, setStartDisplayError] = React.useState(false);
+
+    const[destinationDisplayError, setDestinationDisplayError] = React.useState(false);
+
+
+    function isStartPointValid(flag){
+      setvalidStartPointSelected(true);
+    }
+
+    function isDestinationValid(flag){
+      setValidDestinationPointSelected(flag);
+    }
+
+    React.useEffect(() => {
+      if(validStartPointSelected){
+        setStartDisplayError(false)
+      }
+
+    }, [validStartPointSelected])
+
+    React.useEffect(() => {
+      if(validDestinationPointSelected){
+        setDestinationDisplayError(false)
+      }
+
+    }, [validDestinationPointSelected])
+
+
 
     const nextStep = () => {
-      if(activeStep < 2){
-        setActiveStep(activeStep + 1)
-        console.log(activeStep)
+      console.log(activeStep)
+      
+      if (activeStep == 0) {
+        if(activeStep == 0 && validStartPointSelected){
+          setActiveStep(activeStep + 1) 
+
+        } else{
+          setStartDisplayError(true);
+        } 
       }
-  
+      else if (activeStep == 1){
+        if(activeStep == 1 && validDestinationPointSelected){
+          setActiveStep(activeStep + 1) 
+        }
+        else{
+          setDestinationDisplayError(true);
+        }
+
+      }
+      else if(activeStep >= 2){
+        return
+      }   
+     
     }
   
     const prevStep = () => {
@@ -82,21 +132,32 @@ function SidePanel(props){
                     <StepLabel>Destination</StepLabel>
                     </Step>
                     <Step>
-                    <StepLabel>Vehicle</StepLabel>
+                    <StepLabel>Mode</StepLabel>
                     </Step>
                 </Stepper>
         
-                <StepContent panto={props.panTo} setMarkers={props.setMarkers} currentStep={activeStep}></StepContent>
+                <StepContent 
+                  panto={props.panTo} 
+                  setMarkers={props.setMarkers} 
+                  currentStep={activeStep}
+                  setStartPoint={props.setStartPoint}
+                  setDestination={props.setDestination}
+                  isStartPointValid = {isStartPointValid}
+                  isDestinationValid = {isDestinationValid}
+                  savedStartValue = {props.savedStartValue}
+                  savedDestinationValue = {props.savedDestinationValue}
+                  startDisplayError = {startDisplayError}
+                  destinationDisplayError = {destinationDisplayError}
+
+                  ></StepContent>
         
                 <div style={{paddingTop: "2em", width:"100%", display:"flex", justifyContent:"center"}}>
         
         
                 <Button variant="outlined" color="primary" onClick={prevStep}>Prev</Button>  
         
-                <Button variant="outlined" color="primary" onClick={nextStep}>Next</Button>
-        
-                
-        
+                {activeStep === 2 ? <Button variant="outlined" color="primary" onClick={nextStep}>Finish</Button> 
+                    :<Button variant="outlined" color="primary" onClick={nextStep}>Next</Button>}
                 </div>
                 
         
