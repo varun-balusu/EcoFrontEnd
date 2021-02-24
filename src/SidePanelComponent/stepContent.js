@@ -1,4 +1,4 @@
-import Search from "./search";
+import Search from "../SearchComponent/search";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import React from "react";
@@ -18,12 +18,6 @@ import {
 
 
 function StepContent(props){
-
-  const[modeError, setModeError] = React.useState(false)
-
-  
-
-
 
 
   switch (props.currentStep) {
