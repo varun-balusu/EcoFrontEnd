@@ -47,6 +47,7 @@ function Search(props) {
     try {
       const results = await getGeocode({ address });
       const { lat, lng } = await getLatLng(results[0])
+      console.log( {lat, lng})
 
       if (props.searchNumber == 1) {
         props.setStartPoint(address, { lat, lng })

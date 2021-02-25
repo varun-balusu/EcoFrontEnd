@@ -20,6 +20,27 @@ import {
 function StepContent(props){
 
 
+  const[make, setMake] = React.useState("");
+  const[model, setModel] = React.useState("");
+  const[year, setYear] = React.useState("")
+
+  const handleMakeChange = (e) => {
+    setMake(e.target.value)
+    props.updateCarModeInfo(e.target.value, 1)
+  }
+
+  const handleModelChange = (e) => {
+    setModel(e.target.value)
+    props.updateCarModeInfo(e.target.value, 2)
+  }
+
+  const handleYearChange = (e) => {
+    setYear(e.target.value)
+    props.updateCarModeInfo(e.target.value, 3)
+  }
+  
+
+
   switch (props.currentStep) {
     case 0:
       return (
@@ -114,17 +135,17 @@ function StepContent(props){
           {props.mode=== "Car" ? <div style={{width:"100%",  display:"flex", alignItems:"center", maxWidth:305, flexDirection: "column"}}>
             <div className="search" key="make">
               <Combobox key="jj">
-                <ComboboxInput placeholder="Make" key="makeInput"></ComboboxInput>
+                <ComboboxInput placeholder="Make" key="makeInput" value={make} onChange={(e) => handleMakeChange(e)}></ComboboxInput>
               </Combobox>
             </div>
             <div className="search" style={{paddingTop:"1em"}} key="model">
               <Combobox key="kk">
-                <ComboboxInput placeholder="Model" key="modelInput"></ComboboxInput>
+                <ComboboxInput placeholder="Model" key="modelInput" value={model} onChange={(e) => handleModelChange(e)}></ComboboxInput>
               </Combobox>
             </div>
             <div className="search" style={{paddingTop:"1em"}} key="year">
               <Combobox key="gg">
-                <ComboboxInput placeholder="Year" key="yearInput"></ComboboxInput>
+                <ComboboxInput placeholder="Year" key="yearInput" value={year} onChange={(e) => handleYearChange(e)} ></ComboboxInput>
               </Combobox>
             </div>
           </div> : <div style={{height: 0, width: 0}}></div>}

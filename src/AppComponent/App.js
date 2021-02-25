@@ -64,7 +64,17 @@ function App() {
     startPoint,
     destination,
     isLoaded,
-    loadError } = useApp();
+    loadError,
+    mode,
+    handleChangeMode,
+    modeError,
+    toggleModeError,
+    updateCarModeInfo,
+    setMatrixServiceMode,
+    loadMatrixSerivce,
+    toggleLoadMatrixService,
+    setMatrixTransitOptions,
+    updateMatrixServiceResponse } = useApp();
 
   if (loadError) {
     return "error";
@@ -115,18 +125,29 @@ function App() {
         setDestination={handleDestinationSelect}
         savedStartValue={startPoint}
         savedDestinationValue={destination}
+        mode = {mode}
+        modeError = {modeError}
+        updateMode = {handleChangeMode}
+        toggleModeError = {toggleModeError}
+        updateCarModeInfo = {updateCarModeInfo}
+        toggleLoadMatrixService = {toggleLoadMatrixService}
       ></SidePanel>
 
 
-      {/* <DistanceMatrixService
-      options={{
-           destinations: [{lat:43.653226, lng:-79.3831843}],
-           origins: [{lng:-118.243683, lat:34.052235}],
-           travelMode: "TRANSIT",
-           transitOptions: {modes:["RAIL"]}
-         }}
-      callback = {(response) => {console.log(response)}}
-      /> */}
+      {loadMatrixSerivce ? <DistanceMatrixService
+        options={{
+            destinations: [destination.latlng],
+            origins: [startPoint.latlng],
+            travelMode: setMatrixServiceMode(),
+            transitOptions: {modes: setMatrixTransitOptions()}
+          }}
+        callback = {(response) => {
+          console.log(response)
+          updateMatrixServiceResponse(response) 
+          toggleLoadMatrixService(false)
+
+        }}
+        /> : <></>}
 
     </div>
 

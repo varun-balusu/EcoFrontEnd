@@ -30,24 +30,7 @@ export default function useControlledForm(props) {
 
 
     const [activeStep, setActiveStep] = React.useState(0);
-
-
-    const [mode, setMode] = React.useState("")
-
-    const [modeError, setModeError] = React.useState(false)
-
-
-    function handleChangeMode(option) {
-        setMode(option.target.value)
-    }
-
-    React.useEffect(() => {
-
-        if (mode !== "") {
-            setModeError(false);
-        }
-
-    }, [mode])
+   
 
     const nextStep = () => {
         console.log(activeStep)
@@ -84,8 +67,11 @@ export default function useControlledForm(props) {
     }
 
     const finish = () => {
-        if (mode === "") {
-            setModeError(true);
+        if (props.mode === "") {
+            props.toggleModeError(true);
+        }
+        else{
+            props.toggleLoadMatrixService(true)
         }
         //else call prop function to make api call with all the gathered data
     }
@@ -119,9 +105,11 @@ export default function useControlledForm(props) {
                         savedDestinationValue={props.savedDestinationValue}
                         startDisplayError={startDisplayError}
                         destinationDisplayError={destinationDisplayError}
-                        updateMode={handleChangeMode}
-                        mode={mode}
-                        modeError={modeError}
+                        updateMode={props.updateMode}
+                        mode={props.mode}
+                        modeError={props.modeError}
+                        updateCarModeInfo = {props.updateCarModeInfo}
+
 
                     ></StepContent>
 
