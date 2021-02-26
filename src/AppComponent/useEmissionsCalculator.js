@@ -7,7 +7,6 @@ function useEmissionsCalculator() {
 
 
     const calculateEmissions = async (response, mode, carModeInfo) => {
-        console.log(response)
         if (typeof response === 'undefined') {
             return
         }
@@ -17,19 +16,19 @@ function useEmissionsCalculator() {
 
         const distanceInMiles = response.rows[0].elements[0].distance.value / 1609
 
+        
+
         let emissions = null;
 
         if (mode === 'Car') {
             const mpg = await getVehicleMPG(carModeInfo)
-
+            //if mpg is null after this call then something went worn in fething the data if it was provided or none was given so it remains null
 
             if (mpg !== null) {
 
                 const mpgAsFloat = parseFloat(mpg.data.mpg)
 
                 const gallonsUsed = (1 / mpgAsFloat) * distanceInMiles
-
-                console.log(gallonsUsed)
 
                 emissions = await getEmissions(mode, null, gallonsUsed)
             }
@@ -44,11 +43,6 @@ function useEmissionsCalculator() {
             emissions = await getEmissions(mode, distanceInMiles, null);
 
         }
-
-
-
-
-        console.log(emissions)
 
         return emissions.data
 
@@ -66,6 +60,7 @@ function useEmissionsCalculator() {
 
         }
         else {
+            //generic case
             let transportationType = null;
 
             if (mode === 'Car') {
@@ -124,7 +119,6 @@ function useEmissionsCalculator() {
             console.log(error)
 
         }
-
         return mpg
     }
 

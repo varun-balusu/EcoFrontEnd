@@ -24,6 +24,12 @@ export default function useApp() {
 
     const [matrixServiceResponse, setMatrixServiceResponse] = React.useState({});
 
+    const [openModal, setOpenModal] = React.useState(false);
+
+
+    const toggleModal = (flag) => {
+        setOpenModal(flag);
+    }
 
     const {
         calculateEmissions    
@@ -35,11 +41,13 @@ export default function useApp() {
         setMatrixServiceResponse(response);
         //this is the callback function is which the rest of the api calls may be called
 
-        const mpg = await calculateEmissions(response, mode, carModeInfo)
+        const emissions = await calculateEmissions(response, mode, carModeInfo)
+
+        setOpenModal(true)
        
         
 
-        console.log(mpg)
+        console.log(emissions)
     }
 
 
@@ -198,7 +206,9 @@ export default function useApp() {
         loadMatrixSerivce,
         toggleLoadMatrixService,
         setMatrixTransitOptions,
-        updateMatrixServiceResponse
+        updateMatrixServiceResponse,
+        openModal,
+        toggleModal
 
 
     }

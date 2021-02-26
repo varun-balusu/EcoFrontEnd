@@ -90,7 +90,10 @@ app.get('/projects', async(req, res) =>{
 
     const response = await axios.get('https://api.digitalhumani.com/project', {headers: {"x-api-key":"BJHvUlBIsPL8Gbkl3OF93XQxzIHlU7d3HlR58pUi"} });
 
-    console.log(response);
+    console.log("--------------------------------------------------------")
+    // console.log(response.length);
+
+    res.send(response.data)
 
 
 })
@@ -130,11 +133,9 @@ app.post('/pay', async (req, res) => {
 
 app.post("/getEmissions", async (req, res) => {
   let result = null
-  console.log(req.body.gallonsUsed)
-  console.log(req.body.type)
+  
 
   if(req.body.type === 1){
-    console.log("inside")
     const gallonsUsed = req.body.gallonsUsed.toString()
     const fuelType = req.body.fuelType
     const url = 'https://api.triptocarbon.xyz/v1/footprint?activity='+gallonsUsed+'&activityType=fuel&country=usa&fuelType='+fuelType;
@@ -144,10 +145,7 @@ app.post("/getEmissions", async (req, res) => {
     result = carbonFootprint.data.carbonFootprint
 
   }
-  else if(req.body.type === 2){
-
-    console.log("inside 2")
-    
+  else if(req.body.type === 2){    
     const distance = req.body.distanceInMiles
     const mode = req.body.mode 
 
@@ -166,9 +164,6 @@ app.post("/getEmissions", async (req, res) => {
     result = carbonFootprint.data.carbonFootprint
 
   }
-
-  
-  console.log(result)
 
   res.send(result)
 

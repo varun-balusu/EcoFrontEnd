@@ -11,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Search from "../SearchComponent/search";
 import StepContent from "../SidePanelComponent/stepContent"
 import SidePanel from "../SidePanelComponent/sidePanel"
+import CheckoutModal from "../modalComponent/modal"
 
 import useApp from "./useApp"
 
@@ -74,7 +75,9 @@ function App() {
     loadMatrixSerivce,
     toggleLoadMatrixService,
     setMatrixTransitOptions,
-    updateMatrixServiceResponse } = useApp();
+    updateMatrixServiceResponse,
+    openModal,
+    toggleModal } = useApp();
 
   if (loadError) {
     return "error";
@@ -132,6 +135,8 @@ function App() {
         updateCarModeInfo = {updateCarModeInfo}
         toggleLoadMatrixService = {toggleLoadMatrixService}
       ></SidePanel>
+
+      {openModal? <CheckoutModal openModal={openModal} toggleModal={toggleModal}></CheckoutModal> : <></>}
 
 
       {loadMatrixSerivce ? <DistanceMatrixService
