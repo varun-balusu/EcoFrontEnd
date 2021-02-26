@@ -1,0 +1,140 @@
+import { CompassCalibrationOutlined } from '@material-ui/icons';
+import React from 'react'
+const axios = require('axios').default;
+
+
+function useEmissionsCalculator() {
+
+
+    const calculateEmissions = async (response, mode, carModeInfo) => {
+        console.log(response)
+        if (typeof response === 'undefined') {
+            return
+        }
+        if (!isStatusOk(response)) {
+            return new Error('Invalid response From Google Matrix API')
+        }
+
+        const distanceInMiles = response.rows[0].elements[0].distance.value / 1609
+
+        let emissions = null;
+
+        if (mode === 'Car') {
+            const mpg = await getVehicleMPG(carModeInfo)
+
+
+            if (mpg !== null) {
+
+                const mpgAsFloat = parseFloat(mpg.data.mpg)
+
+                const gallonsUsed = (1 / mpgAsFloat) * distanceInMiles
+
+                console.log(gallonsUsed)
+
+                emissions = await getEmissions(mode, null, gallonsUsed)
+            }
+            else {
+                emissions = await getEmissions(mode, distanceInMiles, null)
+            }
+
+        }
+
+        if (mode !== 'Car') {
+
+            emissions = await getEmissions(mode, distanceInMiles, null);
+
+        }
+
+
+
+
+        console.log(emissions)
+
+        return emissions.data
+
+    }
+
+
+    const getEmissions = async (mode, distanceInMiles, gallonsUsed) => {
+        let emissions = null;
+
+        if (gallonsUsed !== null && distanceInMiles === null) {
+
+            const body = { gallonsUsed: gallonsUsed, fuelType: 'motorGasoline', type: 1 }
+
+            emissions = await axios.post("http://localhost:3001/getEmissions", body)
+
+        }
+        else {
+            let transportationType = null;
+
+            if (mode === 'Car') {
+                transportationType = 'petrolCar'
+            }
+            else if (mode === 'Transit-Rail') {
+                transportationType = 'transitRail'
+            }
+            else if (mode === 'Motorcycle') {
+                transportationType = 'motorbike'
+            }
+            else if (mode === 'Bus') {
+                transportationType = 'bus'
+            }
+
+            const body = { distanceInMiles: distanceInMiles.toString(), mode: transportationType, type: 2 }
+
+            emissions = await axios.post("http://localhost:3001/getEmissions", body)
+
+        }
+
+
+
+        return emissions
+
+
+
+
+
+    }
+
+
+    const isStatusOk = (response) => {
+        if (response === {}) {
+            return false
+        }
+        const data = response.rows[0].elements[0]
+        const status = data.status
+
+        if (status === 'OK') {
+            return true
+        }
+        else {
+            return false
+        }
+
+    }
+
+
+    const getVehicleMPG = async (carModeInfo) => {
+        let mpg = null;
+
+        try {
+            mpg = await axios.post("http://localhost:3001/getVehicleMPG", carModeInfo)
+        } catch (error) {
+            console.log(error)
+
+        }
+
+        return mpg
+    }
+
+
+    return {
+        calculateEmissions
+    }
+
+
+
+}
+
+export default useEmissionsCalculator

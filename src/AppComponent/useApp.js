@@ -1,5 +1,6 @@
 import React from "react";
 import { GoogleMap, useJsApiLoader, Marker, InfoWindow, DistanceMatrixService } from "@react-google-maps/api";
+import useEmissionsCalculator from "./useEmissionsCalculator"
 
 const axios = require('axios').default;
 
@@ -24,10 +25,21 @@ export default function useApp() {
     const [matrixServiceResponse, setMatrixServiceResponse] = React.useState({});
 
 
-    const updateMatrixServiceResponse = (response) => {
+    const {
+        calculateEmissions    
+    } = useEmissionsCalculator()
+    
+
+
+    const updateMatrixServiceResponse = async (response) => {
         setMatrixServiceResponse(response);
         //this is the callback function is which the rest of the api calls may be called
-        console.log(isStatusOk(response));
+
+        const mpg = await calculateEmissions(response, mode, carModeInfo)
+       
+        
+
+        console.log(mpg)
     }
 
 
@@ -35,36 +47,7 @@ export default function useApp() {
         setLoadMatrixService(flag);
     }
 
-    const isStatusOk = (response) => {
-        if(response === {}){
-            return
-        }
-        const data = response.rows[0].elements[0]
-        const status = data.status
-
-        if (status === 'OK') {
-            return true
-        }
-        else {
-            return false
-        }
-
-    }
-
-    // const calculateCarbonEmissions = async (response) => {
-
-    //     if (!isStatusOk(response)) {
-    //         //error google matrix service response status is not OK
-    //         return;
-    //     }
-
-    //     const hello = await axios.get("http://localhost:3001/")
-
-
-    //     console.log("hello");
-
-    // }
-
+    
    
 
     const setMatrixTransitOptions = () => {

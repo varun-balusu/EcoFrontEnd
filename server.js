@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+var cors = require('cors')
 
 const axios = require('axios').default;
 //stripe
@@ -9,19 +10,27 @@ var parseString = require('xml2js').parseString;
 //bodyParse
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
+app.use(cors())
 
 const domain =  "http://localhost:3001";
 
 
+
  
 app.get('/', function (req, res) {
-  res.send('Hello World')
+  res.send({data : 'Hello World'})
 })
 
 app.post('/getVehicleMPG', async(req, res) => {
     const make = req.body.make
     const model = req.body.model
     const year = req.body.year
+
+    if(make === null || model === null || year === null){
+      //check for empty parameters
+      res.status(400).send({error: "Must Provide All Car Information Fields For Accurate Calculations"})
+      return
+    }
 
     var config = {
         headers: {'Accept': 'application/xml'}
@@ -30,22 +39,36 @@ app.post('/getVehicleMPG', async(req, res) => {
 
     var response = await axios.get('https://www.fueleconomy.gov/ws/rest/ympg/shared/vehicles?make='+ make + '&model=' + model, config)
 
+
     
     parseString(response.data.toString(), function (err, result) {
         response = result;
     });
 
+
+    if(response.vehicles === ''){
+      res.status(400).send({error: "invalid Make or Model"})
+      return
+    }
+
     var vehicleID = null;
 
     for(let i=0; i<response.vehicles.vehicle.length; i++){
         const vehicleObject = response.vehicles.vehicle[i]
-
-        if(vehicleObject.year == year){
+        if(vehicleObject.year.toString() === year){
 
           vehicleID = vehicleObject.id
+          
           break;
 
         }
+    }
+
+
+    if(vehicleID === null){
+      //either api dosent contain data for vehicle made that year or invalid year
+      res.status(400).send({error: "invalid Year"})
+      return;
     }
 
 
@@ -56,7 +79,6 @@ app.post('/getVehicleMPG', async(req, res) => {
     });
 
     const result = {"mpg" :mpgResponse.yourMpgVehicle.avgMpg[0]};
-
 
     res.send(result);
 
@@ -106,12 +128,49 @@ app.post('/pay', async (req, res) => {
 
 //tripToCarbon API
 
-app.get("/carbonize", async (req, res) => {
+app.post("/getEmissions", async (req, res) => {
+  let result = null
+  console.log(req.body.gallonsUsed)
+  console.log(req.body.type)
 
-  const axios = require("axios");
-  axios.get('https://api.triptocarbon.xyz/v1/footprint?activity=10&activityType=miles&country=usa&mode=taxi')
-  .then(function (response) { console.log(response.data); })
-  .catch(function (error) { console.log(error); });
+  if(req.body.type === 1){
+    console.log("inside")
+    const gallonsUsed = req.body.gallonsUsed.toString()
+    const fuelType = req.body.fuelType
+    const url = 'https://api.triptocarbon.xyz/v1/footprint?activity='+gallonsUsed+'&activityType=fuel&country=usa&fuelType='+fuelType;
+  
+    const carbonFootprint = await axios.get(url)
+    
+    result = carbonFootprint.data.carbonFootprint
+
+  }
+  else if(req.body.type === 2){
+
+    console.log("inside 2")
+    
+    const distance = req.body.distanceInMiles
+    const mode = req.body.mode 
+
+    const url = 'https://api.triptocarbon.xyz/v1/footprint?activity='+distance+'&activityType=miles&country=def&mode='+mode;
+
+    let carbonFootprint = null;
+
+    try {
+      carbonFootprint  = await axios.get(url)
+
+    } catch (error) {
+      console.log(error)
+      
+    }
+    
+    result = carbonFootprint.data.carbonFootprint
+
+  }
+
+  
+  console.log(result)
+
+  res.send(result)
 
 })
 
