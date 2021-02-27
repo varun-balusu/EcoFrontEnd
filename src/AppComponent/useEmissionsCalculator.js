@@ -1,4 +1,3 @@
-import { CompassCalibrationOutlined } from '@material-ui/icons';
 import React from 'react'
 const axios = require('axios').default;
 
@@ -12,6 +11,9 @@ function useEmissionsCalculator() {
         }
         if (!isStatusOk(response)) {
             return new Error('Invalid response From Google Matrix API')
+        }
+        if(response.rows[0].elements[0].distance.value === 0){
+            return 0
         }
 
         const distanceInMiles = response.rows[0].elements[0].distance.value / 1609

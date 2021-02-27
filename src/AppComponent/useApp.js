@@ -40,7 +40,7 @@ export default function useApp() {
     const updateMatrixServiceResponse = async (response) => {
         setMatrixServiceResponse(response);
         //this is the callback function is which the rest of the api calls may be called
-
+        
         const emissions = await calculateEmissions(response, mode, carModeInfo)
 
         setOpenModal(true)
