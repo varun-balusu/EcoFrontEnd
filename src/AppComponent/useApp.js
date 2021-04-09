@@ -26,6 +26,10 @@ export default function useApp() {
 
     const [openModal, setOpenModal] = React.useState(false);
 
+    const [openLoadingCircle, setOpenLoadingCircle] = React.useState(false);
+
+    const[carbonFootprint, setCarbonFootprint] = React.useState(0)
+
 
     const toggleModal = (flag) => {
         setOpenModal(flag);
@@ -40,14 +44,23 @@ export default function useApp() {
     const updateMatrixServiceResponse = async (response) => {
         setMatrixServiceResponse(response);
         //this is the callback function is which the rest of the api calls may be called
-        
+        setOpenLoadingCircle(true)
+        setDrawerToggle(false);
         const emissions = await calculateEmissions(response, mode, carModeInfo)
+        setOpenLoadingCircle(false)
+        if(!(emissions.message === "Invalid response From Google Matrix API")){
+            setCarbonFootprint(emissions)
+            
 
-        setOpenModal(true)
+            setOpenModal(true)
+
+
+        }
+        
        
         
 
-        console.log(emissions)
+        console.log(emissions.message)
     }
 
 
@@ -208,7 +221,9 @@ export default function useApp() {
         setMatrixTransitOptions,
         updateMatrixServiceResponse,
         openModal,
-        toggleModal
+        toggleModal,
+        carbonFootprint,
+        openLoadingCircle
 
 
     }

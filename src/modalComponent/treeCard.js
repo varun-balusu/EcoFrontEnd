@@ -19,6 +19,35 @@ const useStyles = makeStyles({
   },
 });
 
+const formatNames = (description, companyName, location) => {
+    if(description === 'Khasi Hills in India, WeForest'){
+      return <div>Khasi Hills in India, <br></br>  {companyName}</div>
+    }
+    if(description === 'Seret in Ethiopia, WeForest'){
+      return <div>Secret in Ethiopia, <br></br>  {companyName}</div>
+    }
+    if(companyName === 'Conserve Natural Forests'){
+      return <div>{location}, <br></br>  {companyName}</div>
+    }
+    if(companyName === 'Sustainable Harvest International'){
+      return <div>{location}, <br></br> Sustainable Harvest </div>
+    }
+    if(companyName === 'ChaseAfrica'){
+      return <div>{location}, <br></br> {companyName} </div>
+    }
+    if(companyName === 'OneTreePlanted'){
+        return <div>{location}, <br></br>  {companyName}</div>
+    }
+    if(companyName === 'TIST'){
+      return <div>{location}, <br></br>  {companyName}</div>
+    }
+    if(companyName === 'WeForest'){
+      return <div>{location}, <br></br>  {companyName}</div>
+    }
+    
+    else return description
+}
+
 
 
 export default function TreeCard(props) {
@@ -26,15 +55,22 @@ export default function TreeCard(props) {
   const bull = <span className={classes.bullet}>•</span>;
   const src = props.treeProject.reforestationProjectImageURL_en;
   let description = props.treeProject.description;
-
-  if(description === "India TIST"){
-    description = <div>India, <br></br> TIST</div>
-  }
-  if(description === "Ethiopia OneTreePlanted"){
-    description = <div>Ethiopia, <br></br> OneTreePlanted</div>
-  }
+  let companyName = props.treeProject.reforestationCompanyName_en
+  let location = (typeof props.treeProject.reforestationProjectState_en !== 'undefined') ? props.treeProject.reforestationProjectState_en : props.treeProject.reforestationProjectCountry_en
+  const projectWebsite = props.treeProject.reforestationProjectWebsite_en
+  // if(description === "India TIST"){
+  //   description = <div>India, <br></br> TIST</div>
+  // }
+  // if(description === "Ethiopia OneTreePlanted"){
+  //   description = <div>Ethiopia, <br></br> OneTreePlanted</div>
+  // }
+  description = formatNames(description, companyName, location)
   
   console.log(description)
+
+  const handleClick = () => {
+    window.open(projectWebsite, "_blank")
+  }
 
 
   return (
@@ -45,7 +81,7 @@ export default function TreeCard(props) {
         <CardMedia
           className={classes.media}
           image= {src}
-          title="Contemplative Reptile"
+          title=""
         />
         <CardContent>
           <Typography gutterBottom style={{fontSize: "1.6em"}} variant="h5" component="h2">
@@ -61,7 +97,7 @@ export default function TreeCard(props) {
         <Button size="small" color="primary">
           Share
         </Button>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" onClick={handleClick}>
           Learn More
         </Button>
       </CardActions>

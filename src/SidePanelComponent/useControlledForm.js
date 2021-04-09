@@ -16,8 +16,26 @@ import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from "./stepContent"
 import { Button } from '@material-ui/core';
 
+import { indigo } from '@material-ui/core/colors';
+import { createMuiTheme, withStyles, makeStyles, ThemeProvider } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+    
+    margin: {
+      margin: theme.spacing(1),
+    },
+  
+  }));
+
+  const theme = createMuiTheme({
+    palette: {
+      primary: indigo,
+    },
+  });
+
 
 export default function useControlledForm(props) {
+    const classes = useStyles();
     const { toggleStartDisplayError,
         toggleDestinationDisplayError,
         isStartPointValid,
@@ -115,11 +133,12 @@ export default function useControlledForm(props) {
 
                     <div style={{ paddingTop: "2em", width: "100%", display: "flex", justifyContent: "center" }}>
 
-
+                    <ThemeProvider theme={theme}>
                         <Button variant="outlined" color="primary" onClick={prevStep}>Prev</Button>
+                    </ThemeProvider>
 
                         {activeStep === 2 ? <Button variant="outlined" color="primary" onClick={finish}>Finish</Button>
-                            : <Button variant="outlined" color="primary" onClick={nextStep}>Next</Button>}
+                            : <ThemeProvider theme={theme}><Button variant="outlined" color="primary" onClick={nextStep}>Next</Button></ThemeProvider> }
                     </div>
 
 

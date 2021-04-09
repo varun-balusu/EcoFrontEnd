@@ -6,7 +6,8 @@ import uuid from 'react-uuid';
 
 function TreePlanterGrid(props) {
 
-    const data = props.treeData.data
+    const data = props.treeData
+    console.log(data)
   
 
     
