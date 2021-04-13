@@ -115,7 +115,7 @@ export default function CheckoutModal(props) {
 
                 <p className={classes.tripInfo}>via:</p>
 
-                <p style={{ color: "gray" }} className={classes.tripInfo}>Motorcycle</p>
+                <p style={{ color: "gray" }} className={classes.tripInfo}>{props.mode}</p>
 
               </div>
 
@@ -144,7 +144,7 @@ export default function CheckoutModal(props) {
             
 
 
-            {(!open) ? <></> : <ScrollableTabs treeData={treeData} open={props.openModal}></ScrollableTabs>}
+            {(!open) ? <></> : <ScrollableTabs treeData={treeData} open={props.openModal} triggerLinkCopiedConfirmation={props.triggerLinkCopiedConfirmation}></ScrollableTabs>}
           </div>
         </Fade>
       </Modal>

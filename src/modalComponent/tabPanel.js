@@ -9,6 +9,8 @@ import Box from '@material-ui/core/Box';
 
 import TreePlanterGrid from "./treePlanterGrid"
 
+import useScrollableTabs from "./useScrollableTabs"
+
 function TabPanel(props) {
 
     
@@ -25,7 +27,7 @@ function TabPanel(props) {
         >
             {value === index && (
                 <Box p={3}>
-                    <Typography>{children}</Typography>
+                    <Typography component={'span'}>{children}</Typography>
                 </Box>
             )}
         </div>
@@ -60,61 +62,21 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function ScrollableTabs(props) {
-    const[Asia, setAsia] = React.useState([]);
-    const[Africa, setAfrica] = React.useState([]);
-    const[oceania, setOceania] = React.useState([]);
-    const[europe, setEurope] = React.useState([]);
-    const[carribean, setCarribean] = React.useState([]);
-    const[centralAmerica, setCentralAmerica] = React.useState([]);
-    const[southAmerica, setSouthAmerica] = React.useState([]);
-    const[northAmerica, setNorthAmerica] = React.useState([]);
+    
+    const { 
+        populateLocationArrays,
+        Asia,
+        Africa,
+        oceania,
+        europe,
+        carribean,
+        centralAmerica,
+        southAmerica,
+        northAmerica,
+        value,
+        handleChange } = useScrollableTabs()
 
-    const populateLocationArrays = (objectArray) => {
-        console.log("inside")
-
-        const regions =  ['asia', 'africa', 'oceania', 'europe', 'carribean', 'centralAmerica', 'southAmerica', 'northAmerica']
-        let setters = [setAsia, setAfrica, setOceania, setEurope, setCarribean, setCentralAmerica, setSouthAmerica, setNorthAmerica]
-        let projectsByRegion = new Map()
-
-        for(let i=0; i<regions.length; i++){
-            projectsByRegion.set(regions[i], [])
-        } 
-        
-        
-        for(let i=0; i<objectArray.length; i++){
-            const country = objectArray[i].reforestationProjectCountry_en
-            if(country.match(/^(India|Indonesia|Thailand|Vietnam|Philippines)$/)){
-                projectsByRegion.set('asia', [...projectsByRegion.get('asia'), objectArray[i]])
-            }
-            else if(country.match(/^(Ethiopia|Tanzania|Rwanda|Kenya|Tanzania|Zambia|Uganda|Ghana)$/)){
-                projectsByRegion.set('africa', [...projectsByRegion.get('africa'), objectArray[i]])
-            }
-            else if(country.match(/^(Guatemala|Honduras|Belize)$/)){
-                projectsByRegion.set('centralAmerica', [...projectsByRegion.get('centralAmerica'), objectArray[i]])
-            }
-            else if(country.match(/^(Brazil|Colombia|Peru)$/)){
-                projectsByRegion.set('southAmerica', [...projectsByRegion.get('southAmerica'), objectArray[i]])
-            }
-            else if(country.match(/^(Canada|United States|Mexico)$/)){
-                projectsByRegion.set('northAmerica', [...projectsByRegion.get('northAmerica'), objectArray[i]])
-            } 
-            else if(country.match(/^(Australia|New Zealand)$/)){
-                projectsByRegion.set('oceania', [...projectsByRegion.get('oceania'), objectArray[i]])
-            }
-            else if(country.match(/^(Spain|Iceland|Denmark|Romania|Scotland)$/)){
-                projectsByRegion.set('europe', [...projectsByRegion.get('europe'), objectArray[i]])
-            }
-            else if(country.match(/^(Haiti)$/)){
-                projectsByRegion.set('carribean', [...projectsByRegion.get('carribean'), objectArray[i]])
-            }
-        }
-        
-        for(let i=0; i<setters.length; i++){
-            const regionsProjects = projectsByRegion.get(regions[i])
-            const currentSetterFunction = setters[i]
-            currentSetterFunction(regionsProjects)
-        }
-    }
+    
     
     React.useEffect(() => {
         populateLocationArrays(props.treeData.data)
@@ -126,11 +88,7 @@ export default function ScrollableTabs(props) {
 
 
     const classes = useStyles();
-    const [value, setValue] = React.useState(0);
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
+    
 
     return (
         <div className={classes.root}>
@@ -156,40 +114,38 @@ export default function ScrollableTabs(props) {
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
-             <div>
-                <TreePlanterGrid treeData={Asia}></TreePlanterGrid>
-                </div>
+                <TreePlanterGrid treeData={Asia} triggerLinkCopiedConfirmation={props.triggerLinkCopiedConfirmation}></TreePlanterGrid>
 
             </TabPanel>
             <TabPanel value={value} index={1}>
-            <TreePlanterGrid treeData={Africa}></TreePlanterGrid>
+            <TreePlanterGrid treeData={Africa} triggerLinkCopiedConfirmation={props.triggerLinkCopiedConfirmation}></TreePlanterGrid>
 
             </TabPanel>
             <TabPanel value={value} index={2}>
-            <TreePlanterGrid treeData={oceania}></TreePlanterGrid>
+            <TreePlanterGrid treeData={oceania} triggerLinkCopiedConfirmation={props.triggerLinkCopiedConfirmation}></TreePlanterGrid>
 
             </TabPanel>
             <TabPanel value={value} index={3}>
-            <TreePlanterGrid treeData={europe}></TreePlanterGrid>
+            <TreePlanterGrid treeData={europe} triggerLinkCopiedConfirmation={props.triggerLinkCopiedConfirmation}></TreePlanterGrid>
 
             </TabPanel>
             <TabPanel value={value} index={4}>
-            <TreePlanterGrid treeData={carribean}></TreePlanterGrid>
+            <TreePlanterGrid treeData={carribean} triggerLinkCopiedConfirmation={props.triggerLinkCopiedConfirmation}></TreePlanterGrid>
 
             </TabPanel>
             <TabPanel value={value} index={5}>
 
-            <TreePlanterGrid treeData={centralAmerica}></TreePlanterGrid>
+            <TreePlanterGrid treeData={centralAmerica} triggerLinkCopiedConfirmation={props.triggerLinkCopiedConfirmation}></TreePlanterGrid>
 
             </TabPanel>
             <TabPanel value={value} index={6}>
 
-            <TreePlanterGrid treeData={southAmerica}></TreePlanterGrid>
+            <TreePlanterGrid treeData={southAmerica} triggerLinkCopiedConfirmation={props.triggerLinkCopiedConfirmation}></TreePlanterGrid>
 
             </TabPanel>
             <TabPanel value={value} index={7}>
 
-            <TreePlanterGrid treeData={northAmerica}></TreePlanterGrid>
+            <TreePlanterGrid treeData={northAmerica} triggerLinkCopiedConfirmation={props.triggerLinkCopiedConfirmation}></TreePlanterGrid>
 
             </TabPanel>
         </div>

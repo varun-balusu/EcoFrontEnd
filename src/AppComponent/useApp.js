@@ -28,39 +28,81 @@ export default function useApp() {
 
     const [openLoadingCircle, setOpenLoadingCircle] = React.useState(false);
 
-    const[carbonFootprint, setCarbonFootprint] = React.useState(0)
+    const [carbonFootprint, setCarbonFootprint] = React.useState(0)
+
+    const [openAlert, setOpenAlert] = React.useState(false)
+
+    const [alertMessage, setAlertMessage] = React.useState("")
+
+    const [alertMode, setAlertMode] = React.useState("")
 
 
     const toggleModal = (flag) => {
         setOpenModal(flag);
     }
 
+    const triggerLinkCopiedConfirmation = () => {
+        setAlertMode("success")
+        setAlertMessage("Link was copied to your clipboard")
+        setOpenAlert(true)
+        setTimeout(() => {
+            setOpenAlert(false)
+        }, 6000)
+        
+    }
+
     const {
         calculateEmissions    
     } = useEmissionsCalculator()
     
-
+    
 
     const updateMatrixServiceResponse = async (response) => {
         setMatrixServiceResponse(response);
         //this is the callback function is which the rest of the api calls may be called
         setOpenLoadingCircle(true)
         setDrawerToggle(false);
-        const emissions = await calculateEmissions(response, mode, carModeInfo)
+        const emissions  = await calculateEmissions(response, mode, carModeInfo)
         setOpenLoadingCircle(false)
-        if(!(emissions.message === "Invalid response From Google Matrix API")){
-            setCarbonFootprint(emissions)
-            
+        if(emissions.data == "") {
+            setOpenModal(false)
+            setAlertMode("error")
+            setAlertMessage("There was an error loading your data please try again later.")
+            setOpenAlert(true)
+            setTimeout(() => {
+                setOpenAlert(false)
+            }, 6000)
+             
+        }
+        else if(!(emissions.message === "Invalid response From Google Matrix API")){
+            setCarbonFootprint(emissions.data)
+            if(emissions.message === "Vehicle Not Found") {
+                setAlertMode("warning")
+                setAlertMessage("We couldnt find information on your vehicle. The values below are based on averages. Enter correct spelling and model numbers for more exact data.")
+                setOpenAlert(true)
+                setTimeout(() => {
+                    setOpenAlert(false)
+                }, 6000)
+            }
 
             setOpenModal(true)
+        }      
+        else {
+            setOpenModal(false)
 
-
+            setAlertMode("error")
+            setAlertMessage("We couldnt find a route to your destination. Please change your transportation method and try again.")
+            setOpenAlert(true)
+            setTimeout(() => {
+                setOpenAlert(false)
+            }, 6000)  
+            
+             
         }
         
        
-        
+        setCarModeInfo({make:null, model: null, year: null})
 
-        console.log(emissions.message)
     }
 
 
@@ -220,10 +262,14 @@ export default function useApp() {
         toggleLoadMatrixService,
         setMatrixTransitOptions,
         updateMatrixServiceResponse,
+        triggerLinkCopiedConfirmation,
         openModal,
         toggleModal,
         carbonFootprint,
-        openLoadingCircle
+        openLoadingCircle,
+        openAlert,
+        alertMessage,
+        alertMode
 
 
     }

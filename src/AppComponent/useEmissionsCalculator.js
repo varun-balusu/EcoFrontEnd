@@ -3,11 +3,9 @@ const axios = require('axios').default;
 
 
 function useEmissionsCalculator() {
-
-
     const calculateEmissions = async (response, mode, carModeInfo) => {
         if (typeof response === 'undefined') {
-            return
+            return 
         }
         if (!isStatusOk(response)) {
             return new Error('Invalid response From Google Matrix API')
@@ -27,15 +25,22 @@ function useEmissionsCalculator() {
             //if mpg is null after this call then something went worn in fething the data if it was provided or none was given so it remains null
 
             if (mpg !== null) {
-
                 const mpgAsFloat = parseFloat(mpg.data.mpg)
 
                 const gallonsUsed = (1 / mpgAsFloat) * distanceInMiles
 
                 emissions = await getEmissions(mode, null, gallonsUsed)
+
             }
             else {
+                
                 emissions = await getEmissions(mode, distanceInMiles, null)
+                
+                if (carModeInfo.make != null || carModeInfo.model != null || carModeInfo.year != null){
+                    emissions.message = "Vehicle Not Found"
+                }
+                
+                // console.log(emissions)
             }
 
         }
@@ -46,7 +51,7 @@ function useEmissionsCalculator() {
 
         }
 
-        return emissions.data
+        return emissions
 
     }
 

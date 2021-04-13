@@ -7,7 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 const useStyles = makeStyles({
   root: {
@@ -15,7 +15,7 @@ const useStyles = makeStyles({
     maxHeight: "100%"
   },
   media: {
-    height: 140,
+    height: "20vh",
   },
 });
 
@@ -58,19 +58,16 @@ export default function TreeCard(props) {
   let companyName = props.treeProject.reforestationCompanyName_en
   let location = (typeof props.treeProject.reforestationProjectState_en !== 'undefined') ? props.treeProject.reforestationProjectState_en : props.treeProject.reforestationProjectCountry_en
   const projectWebsite = props.treeProject.reforestationProjectWebsite_en
-  // if(description === "India TIST"){
-  //   description = <div>India, <br></br> TIST</div>
-  // }
-  // if(description === "Ethiopia OneTreePlanted"){
-  //   description = <div>Ethiopia, <br></br> OneTreePlanted</div>
-  // }
+  const projectSummary = props.treeProject.reforestationProjectDescription_en
+  
   description = formatNames(description, companyName, location)
   
-  console.log(description)
 
   const handleClick = () => {
     window.open(projectWebsite, "_blank")
   }
+
+
 
 
   return (
@@ -87,16 +84,18 @@ export default function TreeCard(props) {
           <Typography gutterBottom style={{fontSize: "1.6em"}} variant="h5" component="h2">
             {description}
           </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-            across all continents except Antarctica
+          <Typography variant="body2" color="textSecondary" component="span">
+            {projectSummary}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
+      <CopyToClipboard text={projectWebsite} onCopy={() => props.triggerLinkCopiedConfirmation()}>
         <Button size="small" color="primary">
           Share
         </Button>
+      </CopyToClipboard>
+        
         <Button size="small" color="primary" onClick={handleClick}>
           Learn More
         </Button>

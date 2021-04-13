@@ -32,7 +32,7 @@ function Search(props) {
 
   const { ready, value, suggestions: { status, data }, setValue, clearSuggestions } = usePlacesAutocomplete({
     requestOptions: {
-      location: { lat: () => 43.653225, lng: () => -79.383186 },
+      location: { lat: () => 37.733795, lng: () => -122.446747},
       radius: 200 * 1000
     },
 

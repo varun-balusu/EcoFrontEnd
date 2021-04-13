@@ -3,8 +3,6 @@ const app = express()
 var cors = require('cors')
 
 const axios = require('axios').default;
-//stripe
-const stripe = require('stripe')('sk_test_51IMiHRBLUZqoaNZQUqyKCBTp0RhkLWQuS5epsUOx6hV4y5ERxyjkBTGklwKPXIRId9il0USn3poNAm7rdGU4bIAW005qXmu195');
 //xml parser
 var parseString = require('xml2js').parseString;
 //bodyParse
@@ -98,36 +96,7 @@ app.get('/projects', async(req, res) =>{
 
 })
 
-//stripe payment route
-app.post('/pay', async (req, res) => {
 
-    const session = await stripe.checkout.sessions.create({
-
-        payment_method_types: ['card'],
-        line_items: [
-            {
-              price_data: {
-                currency: 'usd',
-                product_data: {
-                  name: 'Tree Conservation',
-                },
-                unit_amount: 100,
-              },
-              quantity: 8,
-            },
-          ],
-        mode: 'payment',
-        success_url: `${domain}?success=true`,
-        cancel_url: `${domain}?canceled=true`,
-
-    })
-        res.set({
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin" : "*", 
-            "Access-Control-Allow-Credentials" : true 
-        });
-        res.json({ id: session.id });
-})
 
 //tripToCarbon API
 
@@ -140,9 +109,16 @@ app.post("/getEmissions", async (req, res) => {
     const fuelType = req.body.fuelType
     const url = 'https://api.triptocarbon.xyz/v1/footprint?activity='+gallonsUsed+'&activityType=fuel&country=usa&fuelType='+fuelType;
   
-    const carbonFootprint = await axios.get(url)
+    let carbonFootprint = null
+
+    try {
+      carbonFootprint =  await axios.get(url)
+      result = carbonFootprint.data.carbonFootprint
+    } catch(error) {
+      result = null
+    }
     
-    result = carbonFootprint.data.carbonFootprint
+    
 
   }
   else if(req.body.type === 2){    
@@ -155,13 +131,14 @@ app.post("/getEmissions", async (req, res) => {
 
     try {
       carbonFootprint  = await axios.get(url)
+      result = carbonFootprint.data.carbonFootprint
 
     } catch (error) {
-      console.log(error)
+      result = null
       
     }
-    
-    result = carbonFootprint.data.carbonFootprint
+   
+      
 
   }
 
