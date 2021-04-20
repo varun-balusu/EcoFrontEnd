@@ -3,6 +3,7 @@ import { GoogleMap, useJsApiLoader, Marker, InfoWindow, DistanceMatrixService } 
 import useEmissionsCalculator from "./useEmissionsCalculator"
 
 const axios = require('axios').default;
+require('dotenv').config();
 
 const libraries = ["places"];
 
