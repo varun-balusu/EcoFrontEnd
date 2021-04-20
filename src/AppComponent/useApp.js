@@ -186,7 +186,7 @@ export default function useApp() {
 
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script',
-        googleMapsApiKey: "AIzaSyDXAlhX0Ay85xVyVITKedsYg7LlmZfYLuk",
+        googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
         libraries: libraries
     })
 

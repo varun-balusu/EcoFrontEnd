@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 var cors = require('cors')
-
+const path = require('path')
 const axios = require('axios').default;
 //xml parser
 var parseString = require('xml2js').parseString;
@@ -12,7 +12,16 @@ app.use(cors())
 
 const domain =  "http://localhost:3001";
 
+const ENV = process.env.NODE_ENV;
+const PORT = process.env.PORT || 3001;
 
+
+if(ENV == 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')))
+  app.use((req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build/index.html'))
+  })
+}
 
  
 app.get('/', function (req, res) {
@@ -149,6 +158,6 @@ app.post("/getEmissions", async (req, res) => {
 
 
 //start server 
-app.listen(3001, () => {
+app.listen(PORT, () => {
     console.log("server started at port 3001")
 })
