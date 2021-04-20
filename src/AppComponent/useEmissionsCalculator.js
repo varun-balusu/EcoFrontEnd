@@ -33,7 +33,7 @@ function useEmissionsCalculator() {
 
             }
             else {
-                
+    
                 emissions = await getEmissions(mode, distanceInMiles, null)
                 
                 if (carModeInfo.make != null || carModeInfo.model != null || carModeInfo.year != null){
