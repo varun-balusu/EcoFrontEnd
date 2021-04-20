@@ -33,14 +33,14 @@ function useEmissionsCalculator() {
 
             }
             else {
-    
+                //ss
                 emissions = await getEmissions(mode, distanceInMiles, null)
                 
                 if (carModeInfo.make != null || carModeInfo.model != null || carModeInfo.year != null){
                     emissions.message = "Vehicle Not Found"
                 }
                 
-                // console.log(emissions)
+                //  console.log(emissions)
             }
 
         }
