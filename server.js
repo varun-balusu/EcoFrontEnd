@@ -9,6 +9,7 @@ var parseString = require('xml2js').parseString;
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(cors())
+require('dotenv').config();
 
 const domain =  "http://localhost:3001";
 
