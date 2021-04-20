@@ -24,9 +24,9 @@ if(ENV == 'production') {
 }
 
  
-app.get('/', function (req, res) {
-  res.send({data : 'Hello World'})
-})
+// app.get('/', function (req, res) {
+//   res.send({data : 'Hello World'})
+// })
 
 app.post('/getVehicleMPG', async(req, res) => {
     const make = req.body.make
