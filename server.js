@@ -17,9 +17,9 @@ const PORT = process.env.PORT || 3001;
 
 
 if(ENV == 'production') {
-  app.use(express.static(path.join(__dirname, '../client/build')))
+  app.use(express.static(path.join(__dirname, '../ECOWISE/build')))
   app.use((req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build/index.html'))
+    res.sendFile(path.join(__dirname, '../ECOWISE/build/index.html'))
   })
 }
 
