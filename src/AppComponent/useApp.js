@@ -37,7 +37,6 @@ export default function useApp() {
 
     const [alertMode, setAlertMode] = React.useState("")
 
-    console.log(process.env)
 
     const toggleModal = (flag) => {
         setOpenModal(flag);
