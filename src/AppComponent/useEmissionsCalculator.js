@@ -63,7 +63,7 @@ function useEmissionsCalculator() {
 
             const body = { gallonsUsed: gallonsUsed, fuelType: 'motorGasoline', type: 1 }
 
-            emissions = await axios.post("/getEmissions", body)
+            emissions = await axios.post("https://ecowiseus.herokuapp.com/getEmissions", body)
 
         }
         else {
@@ -85,7 +85,7 @@ function useEmissionsCalculator() {
 
             const body = { distanceInMiles: distanceInMiles.toString(), mode: transportationType, type: 2 }
 
-            emissions = await axios.post("/getEmissions", body)
+            emissions = await axios.post("https://ecowiseus.herokuapp.com/getEmissions", body)
 
         }
 
@@ -121,7 +121,7 @@ function useEmissionsCalculator() {
         let mpg = null;
 
         try {
-            mpg = await axios.post("/getVehicleMPG", carModeInfo)
+            mpg = await axios.post("https://ecowiseus.herokuapp.com/getVehicleMPG", carModeInfo)
         } catch (error) {
             console.log(error)
 
