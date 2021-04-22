@@ -71,7 +71,7 @@ export default function CheckoutModal(props) {
 
     const abortController = new AbortController()
 
-    const data = await axios.get('http://localhost:3001/projects', { signal: abortController.signal })
+    const data = await axios.get('/projects', { signal: abortController.signal })
     console.log(data)
     setTreeData(data);
     
